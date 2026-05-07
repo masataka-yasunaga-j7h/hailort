@@ -12,7 +12,9 @@
 #include "md5.h"
 #include <fstream>
 #ifdef __linux__
+#if defined(__linux__) && !defined(__ANDROID__)
 #include <glob.h>
+#endif
 #ifdef GPIO_V2_GET_LINE_IOCTL
 #include <fcntl.h>
 #include <sys/ioctl.h>
@@ -265,7 +267,7 @@ Expected<bool> IntegratedDevice::has_power_sensor()
     }
 
     bool has_power_sensor = false;
-    #ifdef __linux__
+    #if defined(__linux__) && !defined(__ANDROID__)
     glob_t glob_result;
     constexpr auto SENSOR_NAME_FILE_PATHS = "/sys/class/hwmon/hwmon*/name";
     glob(SENSOR_NAME_FILE_PATHS, GLOB_TILDE, NULL, &glob_result);
